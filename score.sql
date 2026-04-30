@@ -1,0 +1,71 @@
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : mysql
+ Source Server Type    : MySQL
+ Source Server Version : 80027
+ Source Host           : localhost:3306
+ Source Schema         : wolin0323
+
+ Target Server Type    : MySQL
+ Target Server Version : 80027
+ File Encoding         : 65001
+
+ Date: 24/04/2026 21:01:47
+*/
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for score
+-- ----------------------------
+DROP TABLE IF EXISTS `score`;
+CREATE TABLE `score`  (
+  `id` int(0) NOT NULL AUTO_INCREMENT COMMENT '主键：成绩ID',
+  `student_no` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '外键：学生学号',
+  `exam_order` int(0) NULL DEFAULT NULL COMMENT '考核序次',
+  `score` decimal(5, 2) NULL DEFAULT NULL COMMENT '考核成绩',
+  `is_deleted` tinyint(0) NULL DEFAULT 0 COMMENT '逻辑删除 0-未删除 1-已删除',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `fk_score_student`(`student_no`) USING BTREE,
+  CONSTRAINT `fk_score_student` FOREIGN KEY (`student_no`) REFERENCES `student` (`student_no`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '成绩表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of score
+-- ----------------------------
+INSERT INTO `score` VALUES (1, 'S2025001', 1, 92.50, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (2, 'S2025001', 2, 88.00, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (3, 'S2025002', 1, 95.00, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (4, 'S2025002', 2, 91.50, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (5, 'S2025003', 1, 85.50, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (6, 'S2025003', 2, 87.00, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (7, 'S2025004', 1, 90.00, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (8, 'S2025004', 2, 93.50, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (9, 'S2025005', 1, 78.00, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (10, 'S2025005', 2, 82.50, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (11, 'S2025006', 1, 89.50, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (12, 'S2025006', 2, 86.00, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (13, 'S2025007', 1, 91.00, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (14, 'S2025007', 2, 94.00, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (15, 'S2025008', 1, 83.50, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (16, 'S2025008', 2, 85.00, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (17, 'S2025009', 1, 96.00, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (18, 'S2025009', 2, 92.50, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (19, 'S2025010', 1, 87.50, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (20, 'S2025010', 2, 89.00, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (21, 'S2025011', 1, 81.00, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (22, 'S2025011', 2, 84.50, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (23, 'S2025012', 1, 93.00, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (24, 'S2025012', 2, 90.50, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (25, 'S2025013', 1, 86.50, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (26, 'S2025013', 2, 88.00, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (27, 'S2025014', 1, 94.50, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (28, 'S2025014', 2, 91.00, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (29, 'S2025015', 1, 82.00, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+INSERT INTO `score` VALUES (30, 'S2025015', 2, 83.50, 0, '2026-04-24 19:26:30', '2026-04-24 19:26:30');
+
+SET FOREIGN_KEY_CHECKS = 1;

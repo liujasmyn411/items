@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生管理系统 - 高级前端作品集</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+            --gradient-2: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%);
+            --gradient-3: linear-gradient(135deg, #f59e0b 0%, #ec4899 100%);
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 60px rgba(99, 102, 241, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 背景粒子效果 */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-100px) translateX(50px); }
+            50% { transform: translateY(-200px) translateX(-50px); }
+            75% { transform: translateY(-100px) translateX(-100px); }
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* 容器 */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero 区域 */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            50% { box-shadow: 0 0 0 15px rgba(99, 102, 241, 0); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .salary-banner {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            background: var(--gradient-1);
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            box-shadow: var(--shadow-glow);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .salary-banner i {
+            font-size: 1.75rem;
+        }
+
+        /* 滚动指示器 */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            animation: scrollDown 2s infinite;
+        }
+
+        @keyframes scrollDown {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            50% { opacity: 0.5; transform: translateX(-50%) translateY(10px); }
+            100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* 统计区域 */
+        .stats {
+            padding: 4rem 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.05) 50%, transparent 100%);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .stat-card:nth-child(1) .stat-icon { background: rgba(99, 102, 241, 0.2); color: var(--primary); }
+        .stat-card:nth-child(2) .stat-icon { background: rgba(236, 72, 153, 0.2); color: var(--secondary); }
+        .stat-card:nth-child(3) .stat-icon { background: rgba(6, 182, 212, 0.2); color: var(--accent); }
+        .stat-card:nth-child(4) .stat-icon { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* 模块展示 */
+        .modules {
+            padding: 6rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(236, 72, 153, 0.15);
+            color: var(--secondary);
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .module-card {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .module-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .module-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .module-card:nth-child(1) .module-icon { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); }
+        .module-card:nth-child(2) .module-icon { background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%); }
+        .module-card:nth-child(3) .module-icon { background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); }
+        .module-card:nth-child(4) .module-icon { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .module-card:nth-child(5) .module-icon { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .module-card:nth-child(6) .module-icon { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
+
+        .module-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .module-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .module-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .module-tag {
+            padding: 0.35rem 0.75rem;
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* 技术栈 */
+        .tech-stack {
+            padding: 6rem 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(6, 182, 212, 0.03) 50%, transparent 100%);
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .tech-card {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: var(--bg-card);
+            border-radius: 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .tech-card:hover {
+            transform: scale(1.05);
+            border-color: var(--accent);
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.2);
+        }
+
+        .tech-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .tech-card:nth-child(1) .tech-icon { color: #e34f26; }
+        .tech-card:nth-child(2) .tech-icon { color: #1572b6; }
+        .tech-card:nth-child(3) .tech-icon { color: #3776ab; }
+        .tech-card:nth-child(4) .tech-icon { color: #cc0000; }
+        .tech-card:nth-child(5) .tech-icon { color: #68a063; }
+        .tech-card:nth-child(6) .tech-icon { color: #ff6a00; }
+
+        .tech-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        /* 团队成员 */
+        .team {
+            padding: 6rem 0;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .team-card {
+            text-align: center;
+            padding: 2.5rem 2rem;
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+
+        .team-card:hover::after {
+            opacity: 0.1;
+        }
+
+        .team-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+        }
+
+        .team-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .team-card:nth-child(1) .team-avatar { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+        .team-card:nth-child(2) .team-avatar { background: linear-gradient(135deg, #ec4899, #f43f5e); }
+        .team-card:nth-child(3) .team-avatar { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+        .team-card:nth-child(4) .team-avatar { background: linear-gradient(135deg, #10b981, #059669); }
+        .team-card:nth-child(5) .team-avatar { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .team-card:nth-child(6) .team-avatar { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+
+        .team-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .team-card .role {
+            color: var(--secondary);
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .team-card .module {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 架构图 */
+        .architecture {
+            padding: 6rem 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(236, 72, 153, 0.03) 50%, transparent 100%);
+        }
+
+        .arch-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .arch-layer {
+            padding: 1.5rem 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            min-width: 180px;
+            position: relative;
+        }
+
+        .arch-layer.client { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+        .arch-layer.api { background: linear-gradient(135deg, #ec4899, #f43f5e); }
+        .arch-layer.dao { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+        .arch-layer.model { background: linear-gradient(135deg, #10b981, #059669); }
+        .arch-layer.database { background: linear-gradient(135deg, #f59e0b, #d97706); }
+
+        .arch-layer h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .arch-layer span {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .arch-arrow {
+            display: flex;
+            align-items: center;
+            font-size: 2rem;
+            color: var(--text-secondary);
+        }
+
+        /* 亮点 */
+        .highlights {
+            padding: 6rem 0;
+        }
+
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .highlight-card {
+            display: flex;
+            gap: 1.5rem;
+            padding: 2rem;
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .highlight-card:hover {
+            border-color: var(--success);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
+        }
+
+        .highlight-icon {
+            width: 60px;
+            height: 60px;
+            min-width: 60px;
+            border-radius: 1rem;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .highlight-content h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-content p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 4rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .footer .heart {
+            color: var(--secondary);
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .modules-grid,
+            .highlights-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tech-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .arch-arrow {
+                transform: rotate(90deg);
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* 动画入场 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- 粒子背景 -->
+    <div class="particles" id="particles"></div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-logo">
+            <i class="fas fa-graduation-cap"></i> 学生管理系统
+        </div>
+        <ul class="nav-links">
+            <li><a href="#overview">概览</a></li>
+            <li><a href="#modules">功能模块</a></li>
+            <li><a href="#tech">技术栈</a></li>
+            <li><a href="#team">团队</a></li>
+            <li><a href="#highlights">亮点</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <section class="hero" id="overview">
+        <div class="hero-content">
+            <div class="badge">
+                <i class="fas fa-sparkles"></i>
+                <span>多人协作开发项目</span>
+            </div>
+            <h1>
+                <span class="gradient-text">学生管理系统</span><br>
+                FastAPI 企业级应用
+            </h1>
+            <p>基于 FastAPI + SQLAlchemy + MySQL 构建的现代化学生信息管理平台，支持完整的 CRUD 操作、数据统计与 JWT 认证</p>
+            <div class="salary-banner">
+                <i class="fas fa-star"></i>
+                <span>月薪 50K · 高级前端工程师</span>
+                <i class="fas fa-crown"></i>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>向下滚动</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- 统计数据 -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card fade-in">
+                    <div class="stat-icon">
+                        <i class="fas fa-file-code"></i>
+                    </div>
+                    <div class="stat-number">36</div>
+                    <div class="stat-label">源文件数量</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">分层架构</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-icon">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">功能模块</div>
+                </div>
+                <div class="stat-card fade-in">
+                    <div class="stat-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">数据库表</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 功能模块 -->
+    <section class="modules" id="modules">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-tag">Core Modules</span>
+                <h2>核心功能模块</h2>
+                <p>六大模块完整覆盖学生信息管理全流程</p>
+            </div>
+            <div class="modules-grid">
+                <div class="module-card fade-in">
+                    <div class="module-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>用户管理</h3>
+                    <p>用户登录注册、个人信息管理、头像上传、角色权限控制</p>
+                    <div class="module-tags">
+                        <span class="module-tag">JWT认证</span>
+                        <span class="module-tag">密码加密</span>
+                        <span class="module-tag">头像上传</span>
+                    </div>
+                </div>
+                <div class="module-card fade-in">
+                    <div class="module-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>学生管理</h3>
+                    <p>学生信息增删改查、多条件搜索、分页展示、数据恢复</p>
+                    <div class="module-tags">
+                        <span class="module-tag">软删除</span>
+                        <span class="module-tag">分页查询</span>
+                        <span class="module-tag">数据统计</span>
+                    </div>
+                </div>
+                <div class="module-card fade-in">
+                    <div class="module-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3>教师管理</h3>
+                    <p>教师信息维护、照片管理、条件筛选、批量操作</p>
+                    <div class="module-tags">
+                        <span class="module-tag">图片上传</span>
+                        <span class="module-tag">条件查询</span>
+                        <span class="module-tag">CRUD</span>
+                    </div>
+                </div>
+                <div class="module-card fade-in">
+                    <div class="module-icon">
+                        <i class="fas fa-school"></i>
+                    </div>
+                    <h3>班级管理</h3>
+                    <p>班级信息管理、班主任分配、班级统计、人数分析</p>
+                    <div class="module-tags">
+                        <span class="module-tag">外键关联</span>
+                        <span class="module-tag">人数统计</span>
+                        <span class="module-tag">男女比例</span>
+                    </div>
+                </div>
+                <div class="module-card fade-in">
+                    <div class="module-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>成绩管理</h3>
+                    <p>成绩录入、排名统计、平均分计算、分数段分析</p>
+                    <div class="module-tags">
+                        <span class="module-tag">统计分析</span>
+                        <span class="module-tag">排名算法</span>
+                        <span class="module-tag">多表查询</span>
+                    </div>
+                </div>
+                <div class="module-card fade-in">
+                    <div class="module-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3>就业管理</h3>
+                    <p>就业信息登记、薪资统计、公司查询、入职跟踪</p>
+                    <div class="module-tags">
+                        <span class="module-tag">多条件查询</span>
+                        <span class="module-tag">薪资排序</span>
+                        <span class="module-tag">数据导出</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 技术栈 -->
+    <section class="tech-stack" id="tech">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-tag">Tech Stack</span>
+                <h2>技术栈</h2>
+                <p>现代化技术栈，打造高性能应用</p>
+            </div>
+            <div class="tech-grid">
+                <div class="tech-card fade-in">
+                    <div class="tech-icon"><i class="fab fa-python"></i></div>
+                    <div class="tech-name">Python</div>
+                </div>
+                <div class="tech-card fade-in">
+                    <div class="tech-icon"><i class="fas fa-bolt"></i></div>
+                    <div class="tech-name">FastAPI</div>
+                </div>
+                <div class="tech-card fade-in">
+                    <div class="tech-icon"><i class="fas fa-database"></i></div>
+                    <div class="tech-name">MySQL</div>
+                </div>
+                <div class="tech-card fade-in">
+                    <div class="tech-icon"><i class="fas fa-sync"></i></div>
+                    <div class="tech-name">SQLAlchemy</div>
+                </div>
+                <div class="tech-card fade-in">
+                    <div class="tech-icon"><i class="fas fa-key"></i></div>
+                    <div class="tech-name">JWT</div>
+                </div>
+                <div class="tech-card fade-in">
+                    <div class="tech-icon"><i class="fas fa-code"></i></div>
+                    <div class="tech-name">RESTful API</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 系统架构 -->
+    <section class="architecture">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-tag">Architecture</span>
+                <h2>系统架构</h2>
+                <p>清晰的分层设计，高内聚低耦合</p>
+            </div>
+            <div class="arch-diagram fade-in">
+                <div class="arch-layer client">
+                    <h4><i class="fas fa-desktop"></i> Client</h4>
+                    <span>前端/移动端</span>
+                </div>
+                <div class="arch-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                <div class="arch-layer api">
+                    <h4><i class="fas fa-server"></i> API Layer</h4>
+                    <span>接口控制器</span>
+                </div>
+                <div class="arch-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                <div class="arch-layer dao">
+                    <h4><i class="fas fa-cubes"></i> DAO Layer</h4>
+                    <span>数据访问层</span>
+                </div>
+                <div class="arch-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                <div class="arch-layer model">
+                    <h4><i class="fas fa-box"></i> Model Layer</h4>
+                    <span>数据模型层</span>
+                </div>
+                <div class="arch-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                <div class="arch-layer database">
+                    <h4><i class="fas fa-database"></i> Database</h4>
+                    <span>MySQL</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 团队成员 -->
+    <section class="team" id="team">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-tag">Our Team</span>
+                <h2>开发团队</h2>
+                <p>六人协作，共创精品</p>
+            </div>
+            <div class="team-grid">
+                <div class="team-card fade-in">
+                    <div class="team-avatar">刘</div>
+                    <h3>刘帅</h3>
+                    <div class="role">全栈工程师</div>
+                    <div class="module">用户管理模块</div>
+                </div>
+                <div class="team-card fade-in">
+                    <div class="team-avatar">钱</div>
+                    <h3>钱铠</h3>
+                    <div class="role">数据工程师</div>
+                    <div class="module">成绩管理模块</div>
+                </div>
+                <div class="team-card fade-in">
+                    <div class="team-avatar">者</div>
+                    <h3>者俊</h3>
+                    <div class="role">后端工程师</div>
+                    <div class="module">学生管理模块</div>
+                </div>
+                <div class="team-card fade-in">
+                    <div class="team-avatar">习</div>
+                    <h3>习老师</h3>
+                    <div class="role">全栈工程师</div>
+                    <div class="module">就业管理模块</div>
+                </div>
+                <div class="team-card fade-in">
+                    <div class="team-avatar">王</div>
+                    <h3>王文祥</h3>
+                    <div class="role">后端工程师</div>
+                    <div class="module">班级管理模块</div>
+                </div>
+                <div class="team-card fade-in">
+                    <div class="team-avatar">黄</div>
+                    <h3>黄家胤</h3>
+                    <div class="role">前端工程师</div>
+                    <div class="module">教师管理模块</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 项目亮点 -->
+    <section class="highlights" id="highlights">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-tag">Highlights</span>
+                <h2>项目亮点</h2>
+                <p>技术选型与架构设计的深度思考</p>
+            </div>
+            <div class="highlights-grid">
+                <div class="highlight-card fade-in">
+                    <div class="highlight-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="highlight-content">
+                        <h3>统一模型层设计</h3>
+                        <p>解决多人协作时模型重复定义问题，通过 Base 基类统一管理共用模型，避免表定义冲突与代码冗余</p>
+                    </div>
+                </div>
+                <div class="highlight-card fade-in">
+                    <div class="highlight-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="highlight-content">
+                        <h3>JWT Token 鉴权</h3>
+                        <p>基于中间件的请求拦截与 Token 验证机制，保障接口安全，支持登录状态管理与 Token 过期处理</p>
+                    </div>
+                </div>
+                <div class="highlight-card fade-in">
+                    <div class="highlight-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <div class="highlight-content">
+                        <h3>软删除机制</h3>
+                        <p>is_deleted 字段实现数据的逻辑删除，支持数据恢复，既保证数据完整性又提供误删保障</p>
+                    </div>
+                </div>
+                <div class="highlight-card fade-in">
+                    <div class="highlight-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="highlight-content">
+                        <h3>多维度数据统计</h3>
+                        <p>班级人数统计、成绩排名分析、就业薪资排行等复杂 SQL 查询，锻炼数据聚合与分析能力</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>
+                Made with <span class="heart"><i class="fas fa-heart"></i></span> by 
+                <strong>月薪50K前端团队</strong> · 2026
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // 创建粒子背景
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 20 + 15) + 's';
+                particle.style.opacity = Math.random() * 0.3 + 0.1;
+                container.appendChild(particle);
+            }
+        }
+
+        // 滚动动画
+        function handleScroll() {
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) {
+                    el.classList.add('visible');
+                }
+            });
+        }
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 初始化
+        createParticles();
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // 初始检查
+    </script>
+</body>
+</html>
